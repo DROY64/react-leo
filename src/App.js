@@ -61,28 +61,57 @@ class App extends React.Component {
   handleAnswerOptionClick(isCorrect) {
     console.log("Button clicked");
     if (isCorrect) {
+      this.setState({ 'score': this.state.score + 1 });
       console.log("Antwoord is goed!");
     } else {
       console.log("Antwoord is fout!");
     }
     console.log("Aantal vragen: " + questions.length);
+ 
+  
     if (this.state.vraagNr < questions.length - 1) {
       this.setState({ vraagNr: this.state.vraagNr + 1 });
     }
+  else {
+    this.setState( { 'stop': true } );
+  }
+
   }
 
   render() {
     var antwoorden = questions[this.state.vraagNr].answerOptions;
+    console.log(this.state.vraagNr, questions.length);
     return (
       <div className="app">
-        <div>{questions[this.state.vraagNr].questionText}</div>
-        <button onClick={() => this.handleAnswerOptionClick(antwoorden[0].isCorrect)}>{antwoorden[0].answerText}</button>
-        <button onClick={() => this.handleAnswerOptionClick(antwoorden[1].isCorrect)}>{antwoorden[1].answerText}</button>
-        <button onClick={() => this.handleAnswerOptionClick(antwoorden[2].isCorrect)}>{antwoorden[2].answerText}</button>
-        <button onClick={() => this.handleAnswerOptionClick(antwoorden[3].isCorrect)}>{antwoorden[3].answerText}</button>
+        {this.state.stop ?  // hier testen we of we moeten stoppen, als we moeten stoppen laat dan het einde zien.
+          (
+            <div className='score'>
+            Jouw score is {this.state.score} van de {questions.length}
+            </div>
+          )
+          : // dit is de else, we stoppen dus niet en laten de volgende vraag zien
+          (
+            <>
+              <div className="column">
+                <span>Vraag {this.state.vraagNr + 1} van {questions.length}</span>
+                <span className="question">{questions[this.state.vraagNr].questionText}</span>
+              </div>
+              
+
+              <div className="column uitlijnen">
+                {antwoorden.map((antwoord) => (
+                  <button onClick={() => this.handleAnswerOptionClick(antwoord.isCorrect)}>{antwoord.answerText} {antwoord.isCorrect}</button>
+                ))}
+                
+              </div>
+
+            </>
+            
+          )
+        }
       </div>
+      
     );
   }
 }
-
 export default App;
