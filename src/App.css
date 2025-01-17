@@ -1,4 +1,11 @@
-.App{
-    text-align: center;
-    color: red;
+.App {
+  text-align: center;
+  color: red;
+}
+
+.red {
+  color: red;
+}
+.green {
+  color: green;
 }
